@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="WebApp_DBLab:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>WebApp_DBLab</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="WebApp_DBLab-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="WebApp" />
+    </root>
+  </artifact>
+</component>

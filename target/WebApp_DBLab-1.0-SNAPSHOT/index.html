@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="shortcut icon" href="#"/>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <style>
+        body{
+            background-color: aliceblue;
+        }
+        #result1{
+            width:600px;
+            height:40px;
+            border:solid 1px black;
+        }
+        #result2{
+            width:600px;
+            height:40px;
+            border:solid 1px black;
+        }
+        table tbody {
+            display:block;
+            height:195px;
+            overflow-y:scroll;
+        }
+        table thead, tbody tr {
+            display:table;
+            width:100%;
+            table-layout:fixed;
+        }
+    </style>
+</head>
+<body>
+    <h1 align="center">University Database</h1>
+    <div class="container">
+        <hr width="100%" size = "30"/>
+        <div class="solve1">
+            <div id="app1">
+                <h4>请输入一个学生ID</h4>
+                <input type="text" ref = "inputVal1" placeholder="请输入一个学生ID" value = "99977" class="form-control"  aria-describedby="basic-addon1">
+                <button v-on:click="courseSearch" class="btn btn-default active">查询课程</button><br><br>
+                <h4 v-if = "show">
+                    <em>
+                    ID : {{student.ID}}<br/>
+                    name : {{student.name}}<br/>
+                    dept_name : {{student.deptName}}<br/>
+                    tot_cred : {{student.totCred}}<br/>
+                    </em>
+                </h4>
+                <table v-if = "show" class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>course_id</th>
+                        <th>title</th>
+                        <th>credits</th>
+                        <th>grade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="course in courses">
+                        <td>{{course.courseID}}</td>
+                        <td>{{course.title}}</td>
+                        <td>{{course.credits}}</td>
+                        <td>{{course.grade}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr width="100%" size = "30"/>
+        <div class = "solve2">
+            <div id="app2">
+                <br><h4>请输入一个关键词</h4>
+                <input type="text" ref = "inputVal2" placeholder="请输入一个关键词" value = "om" class="form-control"  aria-describedby="basic-addon1">
+                <button v-on:click="courseSearch" class="btn btn-default active">查询课程</button><br><br>
+                <table v-if = "show" class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>course_id</th>
+                        <th>title</th>
+                        <th>credits</th>
+                        <th>grade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="course in courses">
+                        <td>{{course.courseID}}</td>
+                        <td>{{course.title}}</td>
+                        <td>{{course.deptName}}</td>
+                        <td>{{course.credits}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr width="100%" size = "30"/>
+        <div class="solve3">
+            <div id="app3">
+                <br><h4>请输入挂科数目</h4>
+                <input type="text" ref = "inputVal3" placeholder="请输入挂科数目" value = "2" class="form-control"  aria-describedby="basic-addon1">
+                <button v-on:click="findFailStudent" class="btn btn-default active">查询</button><br><br>
+                <table v-if = "show" class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>name</th>
+                        <th>dept_name</th>
+                        <th>tot_cred</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for = "student in students">
+                        <td>{{student.ID}}</td>
+                        <td>{{student.name}}</td>
+                        <td>{{student.deptName}}</td>
+                        <td>{{student.totCred}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr width="100%" size = "30"/>
+        <div class = "solve4">
+            <div id="app4">
+                <br><h4>请输入要添加的学生的信息</h4>
+                    <div class="input-group">
+                        <input type="text" ref = "inputID" placeholder="请输入学生ID" class="form-control"  aria-describedby="basic-addon1">
+                        <input type="text" ref = "inputName" placeholder="请输入学生姓名" class="form-control"  aria-describedby="basic-addon1">
+                        <input type="fix" ref = "inputTotCred" value = tot_cred:0 readonly = "readonly" class="form-control"  aria-describedby="basic-addon1">
+
+                        <!--<input type="text" ref = "inputDeptName" placeholder="请输入学生院系" list="deptName"> -->
+                        <br/><br/><span>请选择院系: </span>
+                        <select v-model = "selected" v-on:click = "listDept" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <option disabled>请选择院系</option>
+                            <option v-for="deptName in deptNames" :value = "deptName">{{deptName}}</option>
+                        </select><br/><br/>
+                        <br/><button v-on:click="insertStu" class="btn btn-default active">点此添加</button>
+                        <div id = "result1" ref = "result1" class="alert" role="alert">请在上面输入学生信息</div>
+                    </div>
+            </div>
+        </div>
+
+        <hr width="100%" size = "30"/>
+        <div class = "solve5">
+            <div id="app5">
+                <br><h4>请输入要添加的教师的信息</h4>
+                    <div class="input-group">
+                        <input type="text" ref = "inputInstructorID" placeholder="请输入教师ID" placeholder="请输入学生ID" class="form-control"  aria-describedby="basic-addon1">
+                        <input type="text" ref = "inputInstructorName" placeholder="请输入教师姓名" placeholder="请输入学生ID" class="form-control"  aria-describedby="basic-addon1">
+                        <!--<input type="text" ref = "inputInstructorDeptName" placeholder="请输入教师院系">-->
+                        <input type="fix" ref = "inputSalry" value = salary:29001 readonly = "readonly" placeholder="请输入学生ID" class="form-control"  aria-describedby="basic-addon1">
+
+                        <br/><br/><span>请选择院系: </span>
+                        <select v-model = "selected" v-on:click = "listDept" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <option disabled>请选择院系</option>
+                            <option v-for="deptName in deptNames" :value = "deptName">{{deptName}}</option>
+                        </select><br><br>
+                        <br><button v-on:click="insertInstructor" class="btn btn-default active">点此添加</button>
+                        <div id = "result2" ref = "result2" class="alert" role="alert">请在上面输入教师信息</div>
+                    </div>
+            </div>
+        </div>
+
+        <hr width="100%" size = "30"/>
+        <div class="solve6">
+            <div id="createDropDown">
+                <br><h4>请输入sql查询语句</h4>
+                <input type="text" ref = "inputSql" placeholder="请输入sql查询语句" value = "select * from student" class="form-control"  aria-describedby="basic-addon1">
+                <button v-on:click="sqlSearch" class="btn btn-default active">查询</button><br><br>
+                <table v-if = "show" class="table table-condensed">
+                    <thead>
+                    <!--
+                    <tr>
+                        <th>ID</th>
+                        <th>name</th>
+                        <th>dept_name</th>
+                        <th>tot_cred</th>
+                    </tr>
+                    -->
+                    </thead>
+                    <tbody>
+                    <tr v-for = "list in lists">
+                        <td v-for = "(column, index) in list">{{list[index]}}</td>
+                        <!--<td>{{list[1]}}</td>
+                        <td>{{list[2]}}</td>
+                        <td>{{list[3]}}</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="./static/main.js"></script>
+</body>
+</html>
