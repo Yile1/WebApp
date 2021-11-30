@@ -180,27 +180,16 @@
                 <button v-on:click="sqlSearch" class="btn btn-default active">查询</button><br><br>
                 <table v-if = "show" class="table table-condensed">
                     <thead>
-                    <!--
-                    <tr>
-                        <th>ID</th>
-                        <th>name</th>
-                        <th>dept_name</th>
-                        <th>tot_cred</th>
-                    </tr>
-                    -->
                     </thead>
                     <tbody>
                     <tr v-for = "list in lists">
                         <td v-for = "(column, index) in list">{{list[index]}}</td>
-                        <!--<td>{{list[1]}}</td>
-                        <td>{{list[2]}}</td>
-                        <td>{{list[3]}}</td>-->
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <script src="./static/main.js"></script>
+    <script src="static/main.js"></script>
 </body>
 </html>

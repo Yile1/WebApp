@@ -27,16 +27,14 @@ public class CourseServlet extends HttpServlet {
             String info = gson.toJson(lists);
             System.out.println(info);
             out.write(info);
-            out.flush();
-            out.close();
         }else if(solve.equals("2")){
             String keyWord = req.getParameter("keyWord");
             List<Course> lists = universityService.searchCourseByTitle(keyWord);
             String info = gson.toJson(lists);
             System.out.println(info);
             out.write(info);
-            out.flush();
-            out.close();
         }
+        out.flush();
+        out.close();
     }
 }
